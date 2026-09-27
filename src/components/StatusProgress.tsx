@@ -1,0 +1,4 @@
+import type { ApplicationStatus } from '../types/application'
+interface StatusProgressProps { status: ApplicationStatus }
+const stages: ApplicationStatus[] = ['Applied', 'Interview', 'Offer']
+export function StatusProgress({ status }: StatusProgressProps) { if (status === 'Rejected') return <div className="status-progress status-progress-rejected"><span className="progress-dot active" /><span>Rejected</span></div>; const currentStage = stages.indexOf(status); return <div className="status-progress" aria-label={`Current stage: ${status}`}>{stages.map((stage, index) => <span className="progress-stage" key={stage}><span className={`progress-dot ${index <= currentStage ? 'active' : ''}`} /><span>{stage}</span>{index < stages.length - 1 && <span className={`progress-line ${index < currentStage ? 'active' : ''}`} />}</span>)}</div> }

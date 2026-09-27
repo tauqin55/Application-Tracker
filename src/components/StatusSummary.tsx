@@ -1,0 +1,3 @@
+import { APPLICATION_STATUSES, type ApplicationStatus } from '../types/application'
+interface StatusSummaryProps { counts: Record<ApplicationStatus, number> }
+export function StatusSummary({ counts }: StatusSummaryProps) { return <section className="status-summary" aria-label="Application status summary">{APPLICATION_STATUSES.map((status) => <article className={`summary-card summary-${status.toLowerCase()}`} key={status}><span className="summary-label">{status}</span><strong>{counts[status]}</strong><span className="summary-detail">{counts[status] === 1 ? 'application' : 'applications'}</span></article>)}</section> }
