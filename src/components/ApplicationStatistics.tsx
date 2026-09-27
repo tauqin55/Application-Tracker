@@ -1,0 +1,10 @@
+import { APPLICATION_STATUSES, type ApplicationStatus } from '../types/application'
+
+interface ApplicationStatisticsProps { total: number; counts: Record<ApplicationStatus, number> }
+const percentage = (value: number, total: number) => total === 0 ? 0 : Math.round((value / total) * 100)
+
+export function ApplicationStatistics({ total, counts }: ApplicationStatisticsProps) {
+  const interviewRate = percentage(counts.Interview, total)
+  const offerRate = percentage(counts.Offer, total)
+  return <section className="statistics-panel" aria-labelledby="statistics-heading"><div className="statistics-heading"><div><p className="eyebrow">APPLICATION INSIGHTS</p><h2 id="statistics-heading">Application statistics</h2></div><p>Updated from your current application records.</p></div><div className="statistics-content"><div className="metrics-grid"><article className="metric-card"><span>Total applications</span><strong>{total}</strong></article><article className="metric-card"><span>Interviews</span><strong>{counts.Interview}</strong></article><article className="metric-card"><span>Offers</span><strong>{counts.Offer}</strong></article><article className="metric-card"><span>Rejected</span><strong>{counts.Rejected}</strong></article><article className="metric-card rate-card"><span>Interview rate</span><strong>{interviewRate}%</strong></article><article className="metric-card rate-card"><span>Offer rate</span><strong>{offerRate}%</strong></article></div><div className="distribution-chart" aria-label="Application status distribution"><h3>Status distribution</h3>{APPLICATION_STATUSES.map((status) => { const count = counts[status]; const value = percentage(count, total); return <div className="distribution-row" key={status}><div className="distribution-label"><span>{status}</span><strong>{count}</strong></div><div className="distribution-track"><span className={`distribution-bar distribution-${status.toLowerCase()}`} style={{ width: `${value}%` }} /></div><span className="distribution-percent">{value}%</span></div> })}</div></div></section>
+}
