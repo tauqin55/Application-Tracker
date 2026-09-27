@@ -1,6 +1,7 @@
-import { APPLICATION_STATUSES, type Application, type ApplicationStatus } from '../types/application'
+import { APPLICATION_STATUSES, type Application, type ApplicationStatus, type Interview } from '../types/application'
 
 const STORAGE_KEY = 'application-tracker:applications'
+const isInterview = (value: unknown): value is Interview => { if (!value || typeof value !== 'object') return false; const interview = value as Record<string, unknown>; return typeof interview.id === 'string' && typeof interview.interviewDate === 'string' && typeof interview.round === 'string' && typeof interview.notes === 'string' }
 
 const isApplication = (value: unknown): value is Application => {
   if (!value || typeof value !== 'object') return false
@@ -10,6 +11,7 @@ const isApplication = (value: unknown): value is Application => {
     && typeof application.position === 'string'
     && typeof application.applicationDate === 'string'
     && (typeof application.deadline === 'undefined' || typeof application.deadline === 'string')
+    && (typeof application.interviews === 'undefined' || (Array.isArray(application.interviews) && application.interviews.every(isInterview)))
     && typeof application.notes === 'string'
     && APPLICATION_STATUSES.includes(application.status as ApplicationStatus)
 }
