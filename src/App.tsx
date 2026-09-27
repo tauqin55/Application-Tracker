@@ -11,9 +11,10 @@ import { loadApplications, saveApplications } from './utils/applicationStorage'
 import './App.css'
 import './filters.css'
 import './statistics.css'
+import './deadline.css'
 import './data-transfer.css'
 
-const blankApplication = (): Omit<Application, 'id'> => ({ company: '', position: '', applicationDate: new Date().toISOString().slice(0, 10), status: 'Applied', notes: '' })
+const blankApplication = (): Omit<Application, 'id'> => ({ company: '', position: '', applicationDate: new Date().toISOString().slice(0, 10), deadline: '', status: 'Applied', notes: '' })
 
 function App() {
   const [applications, setApplications] = useState<Application[]>(loadApplications)

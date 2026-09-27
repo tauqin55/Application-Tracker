@@ -6,7 +6,7 @@ interface DataTransferControlsProps { applications: Application[]; onImport: (ap
 const isApplication = (value: unknown): value is Application => {
   if (!value || typeof value !== 'object') return false
   const application = value as Record<string, unknown>
-  return typeof application.id === 'string' && typeof application.company === 'string' && typeof application.position === 'string' && typeof application.applicationDate === 'string' && typeof application.notes === 'string' && APPLICATION_STATUSES.includes(application.status as ApplicationStatus)
+  return typeof application.id === 'string' && typeof application.company === 'string' && typeof application.position === 'string' && typeof application.applicationDate === 'string' && (typeof application.deadline === 'undefined' || typeof application.deadline === 'string') && typeof application.notes === 'string' && APPLICATION_STATUSES.includes(application.status as ApplicationStatus)
 }
 
 export function DataTransferControls({ applications, onImport }: DataTransferControlsProps) {
