@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { ApplicationFilters, type DateSortOrder } from './components/ApplicationFilters'
 import { ApplicationForm } from './components/ApplicationForm'
 import { ApplicationsTable } from './components/ApplicationsTable'
@@ -6,6 +6,7 @@ import { ConfirmDialog } from './components/ConfirmDialog'
 import { ApplicationStatistics } from './components/ApplicationStatistics'
 import { StatusSummary } from './components/StatusSummary'
 import { APPLICATION_STATUSES, type Application, type ApplicationStatus } from './types/application'
+import { loadApplications, saveApplications } from './utils/applicationStorage'
 import './App.css'
 import './filters.css'
 import './statistics.css'
@@ -13,13 +14,14 @@ import './statistics.css'
 const blankApplication = (): Omit<Application, 'id'> => ({ company: '', position: '', applicationDate: new Date().toISOString().slice(0, 10), status: 'Applied', notes: '' })
 
 function App() {
-  const [applications, setApplications] = useState<Application[]>([])
+  const [applications, setApplications] = useState<Application[]>(loadApplications)
   const [editingApplication, setEditingApplication] = useState<Application | null>(null)
   const [isFormOpen, setIsFormOpen] = useState(false)
   const [applicationToDelete, setApplicationToDelete] = useState<Application | null>(null)
   const [searchTerm, setSearchTerm] = useState('')
   const [statusFilter, setStatusFilter] = useState<ApplicationStatus | 'All'>('All')
   const [dateSortOrder, setDateSortOrder] = useState<DateSortOrder>('newest')
+  useEffect(() => { saveApplications(applications) }, [applications])
   const openNewForm = () => { setEditingApplication(null); setIsFormOpen(true) }
   const saveApplication = (details: Omit<Application, 'id'>) => { setApplications((current) => editingApplication ? current.map((application) => application.id === editingApplication.id ? { ...details, id: application.id } : application) : [...current, { ...details, id: crypto.randomUUID() }]); setIsFormOpen(false); setEditingApplication(null) }
   const updateStatus = (id: string, status: ApplicationStatus) => setApplications((current) => current.map((application) => application.id === id ? { ...application, status } : application))
