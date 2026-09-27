@@ -1,5 +1,5 @@
 import { useRef, useState, type ChangeEvent } from 'react'
-import { APPLICATION_STATUSES, type Application, type ApplicationStatus, type Interview } from '../types/application'
+import { APPLICATION_PRIORITIES, APPLICATION_STATUSES, type Application, type ApplicationPriority, type ApplicationStatus, type Interview } from '../types/application'
 
 interface DataTransferControlsProps { applications: Application[]; onImport: (applications: Application[]) => void }
 const isInterview = (value: unknown): value is Interview => { if (!value || typeof value !== 'object') return false; const interview = value as Record<string, unknown>; return typeof interview.id === 'string' && typeof interview.interviewDate === 'string' && typeof interview.round === 'string' && typeof interview.notes === 'string' }
@@ -7,7 +7,7 @@ const isInterview = (value: unknown): value is Interview => { if (!value || type
 const isApplication = (value: unknown): value is Application => {
   if (!value || typeof value !== 'object') return false
   const application = value as Record<string, unknown>
-  return typeof application.id === 'string' && typeof application.company === 'string' && typeof application.position === 'string' && typeof application.applicationDate === 'string' && (typeof application.deadline === 'undefined' || typeof application.deadline === 'string') && (typeof application.interviews === 'undefined' || (Array.isArray(application.interviews) && application.interviews.every(isInterview))) && typeof application.notes === 'string' && APPLICATION_STATUSES.includes(application.status as ApplicationStatus)
+  return typeof application.id === 'string' && typeof application.company === 'string' && typeof application.position === 'string' && typeof application.applicationDate === 'string' && (typeof application.deadline === 'undefined' || typeof application.deadline === 'string') && (typeof application.interviews === 'undefined' || (Array.isArray(application.interviews) && application.interviews.every(isInterview))) && (typeof application.priority === 'undefined' || APPLICATION_PRIORITIES.includes(application.priority as ApplicationPriority)) && typeof application.notes === 'string' && APPLICATION_STATUSES.includes(application.status as ApplicationStatus)
 }
 
 export function DataTransferControls({ applications, onImport }: DataTransferControlsProps) {
